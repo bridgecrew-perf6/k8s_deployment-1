@@ -21,7 +21,6 @@ jobs:
   setup-build-publish-deploy:
     name: Setup, Build, Publish, and Deploy
     runs-on: ubuntu-latest
-    environment: production
 
     steps:
     - name: Checkout
@@ -65,16 +64,28 @@ jobs:
       run: |-
         docker push "eu.gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
 
-    # Set up kustomize
-    - name: Set up Kustomize
-      run: |-
-        curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
-        chmod u+x ./kustomize
+    - name: Check cluster connection
+      run: gcloud container clusters get-credentials my-cluster --region europe-west3-a
 
-    # Deploy the Docker image to the GKE cluster
-    - name: Deploy
-      run: |-
-        ./kustomize edit set image eu.gcr.io/PROJECT_ID/IMAGE:TAG=eu.gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
-        ./kustomize build . | kubectl apply -f -
-        kubectl rollout status deployment/$DEPLOYMENT_NAME
-        kubectl get services -o wide
+    - name: Create Deployment
+      run: kubectl create deployment hello-app --image=eu.gcr.io/PROJECT_ID/IMAGE:TAG=eu.gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
+
+    - name: Get Pods
+      run: kubectl get pods
+
+    - name: Expose Deployment
+      run: kubectl expose deployment hello-app --name=hello-app-service --type=LoadBalancer --port 80 --target-port 80
+
+    # # Set up kustomize
+    # - name: Set up Kustomize
+    #   run: |-
+    #     curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
+    #     chmod u+x ./kustomize
+
+    # # Deploy the Docker image to the GKE cluster
+    # - name: Deploy
+    #   run: |-
+    #     ./kustomize edit set image eu.gcr.io/PROJECT_ID/IMAGE:TAG=eu.gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
+    #     ./kustomize build . | kubectl apply -f -
+    #     kubectl rollout status deployment/$DEPLOYMENT_NAME
+    #     kubectl get services -o wide
