@@ -27,12 +27,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Move into app directory
-      run: cd /home/runner/work/kubernetes-engine-samples/kubernetes-engine-samples/hello-app
-
-    - name: Run ls
-      run: pwd
-
     # Setup gcloud CLI
     - uses: google-github-actions/setup-gcloud@94337306dda8180d967a56932ceb4ddcf01edae7
       with:
@@ -58,7 +52,6 @@ jobs:
     # Build the Docker image
     - name: Build
       run: |-
-        cd /home/runner/work/kubernetes-engine-samples/kubernetes-engine-samples/hello-app
         pwd
         ls
         docker build \
