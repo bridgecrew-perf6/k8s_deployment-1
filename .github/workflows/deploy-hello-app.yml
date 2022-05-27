@@ -68,7 +68,7 @@ jobs:
       run: gcloud container clusters get-credentials my-cluster --region europe-west3-a
 
     - name: Set deployment image
-      run: kubectl set image deployment/hello-app hello-app=eu.gcr.io/PROJECT_ID/IMAGE:TAG=eu.gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
+      run: kubectl set image deployment/hello-app hello-app=eu.gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
 
     - name: echo image name
       run: echo eu.gcr.io/PROJECT_ID/IMAGE:TAG=eu.gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
