@@ -71,7 +71,7 @@ jobs:
       run: kubectl set image deployment/hello-app hello-app=eu.gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
 
     - name: echo image name
-      run: echo eu.gcr.io/PROJECT_ID/IMAGE:TAG=eu.gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
+      run: echo eu.gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
 
     - name: Get Pods
       run: kubectl get pods
