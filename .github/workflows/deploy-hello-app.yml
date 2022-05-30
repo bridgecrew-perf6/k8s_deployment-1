@@ -14,7 +14,7 @@ env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GKE_CLUSTER: my-cluster    # Add your cluster name here.
   GKE_ZONE: europe-west3-a   # Add your cluster zone here.
-  DEPLOYMENT_NAME: gke-test # Add your deployment name here.
+  DEPLOYMENT_NAME: hello-app # Add your deployment name here.
   IMAGE: static-site
 
 jobs:
@@ -64,7 +64,7 @@ jobs:
       run: |-
         docker push "eu.gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
 
-    - name: Check cluster connection
+    - name: Get cluster credentials
       run: gcloud container clusters get-credentials my-cluster --region europe-west3-a
 
     - name: Set deployment image
