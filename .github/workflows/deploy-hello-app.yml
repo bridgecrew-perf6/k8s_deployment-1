@@ -1,7 +1,7 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
+# # This workflow uses actions that are not certified by GitHub.
+# # They are provided by a third-party and are governed by
+# # separate terms of service, privacy policy, and support
+# # documentation.
 
 name: Build and Deploy to GKE
 
@@ -9,6 +9,7 @@ on:
   push:
     branches:
       - main
+      - flux-test
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
@@ -60,14 +61,14 @@ jobs:
       run: |-
         docker push "eu.gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
 
-    - name: Get cluster credentials
-      run: gcloud container clusters get-credentials my-cluster --region europe-west3-a
+#     - name: Get cluster credentials
+#       run: gcloud container clusters get-credentials my-cluster --region europe-west3-a
 
-    - name: Set deployment image
-      run: kubectl set image deployment/hello-app *=eu.gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
+#     - name: Set deployment image
+#       run: kubectl set image deployment/hello-app *=eu.gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
 
-    - name: echo image name
-      run: echo eu.gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
+#     - name: echo image name
+#       run: echo eu.gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
 
-    - name: Get Pods
-      run: kubectl get pods
+#     - name: Get Pods
+#       run: kubectl get pods
